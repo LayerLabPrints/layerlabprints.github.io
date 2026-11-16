@@ -3,29 +3,50 @@
 // ============================================================
 
 const SHOP = {
-  name: "Layer Lab",   // business name (placeholder)
+  name: "Layer Lab",   // business name
   email: "rishik.sundar03@gmail.com",   // quote requests get emailed here
 };
 
 // icon options: fidget, desk, tech, key, plant, ball, tag, gem
+//
+// PHOTOS: put picture files in the "photos" folder, then list them on the product, like:
+//   photos: ["photos/clicker-1.jpg", "photos/clicker-2.jpg"],
+// A product with photos shows the first one on its card, and tapping it opens the gallery.
 const PRODUCTS = [
-  { name: "Articulated dragon",        cat: "Fidgets", icon: "gem",    desc: "A bendy dragon printed in one piece. Every joint moves." },
-  { name: "Clicker",             cat: "Fidgets", icon: "fidget", desc: "Press it for a loud, satisfying click. Small enough for your pocket." },
-  { name: "Slider fidget",      cat: "Fidgets", icon: "fidget", desc: "A pocket-size clicky slider for busy hands." },
-  { name: "Infinity cube",       cat: "Fidgets", icon: "fidget", desc: "Fold it forever. Printed already assembled." },
-  { name: "Phone stand",         cat: "Tech",    icon: "tech",   desc: "Holds your phone upright or sideways for videos." },
-  { name: "Controller holder",    cat: "Tech",    icon: "tech",   desc: "A clean spot to park your game controller." },
-  { name: "Under-desk headphone hook",      cat: "Tech",    icon: "tech",   desc: "Clips under a desk so your headphones stay off it." },
-  { name: "Pen holder",          cat: "Desk",    icon: "desk",   desc: "A desk cup with a cool printed pattern." },
-  { name: "Cable clips",         cat: "Desk",    icon: "desk",   desc: "A set of clips that keep chargers from sliding away." },
-  { name: "Desk name plate",          cat: "Desk",    icon: "tag",    desc: "Your name in raised letters for a desk or door." },
-  { name: "Custom name keychain",       cat: "Keychains", icon: "key",  desc: "Any name or word, in any two colors." },
-  { name: "Bag tag",        cat: "Keychains", icon: "key",  desc: "A tough tag so your bag never gets mixed up." },
-  { name: "Soccer ball bag tag",      cat: "Sports",  icon: "ball",   desc: "A ball-shaped tag with your name and number." },
-  { name: "Medal hanger",        cat: "Sports",  icon: "ball",   desc: "A wall hanger to show off medals. Add a team name." },
-  { name: "Small planter",        cat: "Home",    icon: "plant",  desc: "A small pot for succulents, with a drip tray." },
-  { name: "Wall hook",           cat: "Home",    icon: "plant",  desc: "A strong hook for keys, hats, or bags." },
-  { name: "Something else",       cat: "Custom",  icon: "tag",    desc: "Got something in mind? Describe it and I'll try to print it." },
+  { name: "Clicker", cat: "Fidgets", icon: "fidget", photos: [],
+    desc: "Has a real switch inside so it actually clicks. Kind of addicting." },
+  { name: "Articulated dragon", cat: "Fidgets", icon: "gem", photos: [],
+    desc: "Prints in one piece and wiggles when you pick it up. Looks really good in the silk colours." },
+  { name: "Slider fidget", cat: "Fidgets", icon: "fidget", photos: [],
+    desc: "Slides back and forth with a snap. Fits in your pocket." },
+  { name: "Infinity cube", cat: "Fidgets", icon: "fidget", photos: [],
+    desc: "You just keep folding it. Good for when you're bored." },
+  { name: "Phone stand", cat: "Tech", icon: "tech", photos: [],
+    desc: "Props your phone up so you can watch stuff hands-free. Works sideways too." },
+  { name: "Controller holder", cat: "Tech", icon: "tech", photos: [],
+    desc: "Somewhere to put your controller that isn't the floor." },
+  { name: "Under-desk headphone hook", cat: "Tech", icon: "tech", photos: [],
+    desc: "Goes under your desk and keeps your headphones out of the way." },
+  { name: "Pen holder", cat: "Desk", icon: "desk", photos: [],
+    desc: "Holds pens, pencils, scissors, whatever's on your desk." },
+  { name: "Cable clips", cat: "Desk", icon: "desk", photos: [],
+    desc: "Stops your charger from falling behind the desk every time you unplug it." },
+  { name: "Desk name plate", cat: "Desk", icon: "tag", photos: [],
+    desc: "Your name in raised letters. For your desk or your door." },
+  { name: "Custom name keychain", cat: "Keychains", icon: "key", photos: [],
+    desc: "Any name or word you want. Just type it in the details box." },
+  { name: "Bag tag", cat: "Keychains", icon: "key", photos: [],
+    desc: "So you can tell which bag is yours. Can have your name on it." },
+  { name: "Soccer ball bag tag", cat: "Sports", icon: "ball", photos: [],
+    desc: "Soccer ball shape with your name and number. Good for a whole team." },
+  { name: "Medal hanger", cat: "Sports", icon: "ball", photos: [],
+    desc: "Goes on the wall and holds your medals. I can put a name or team on it." },
+  { name: "Small planter", cat: "Home", icon: "plant", photos: [],
+    desc: "For a little plant or a succulent." },
+  { name: "Wall hook", cat: "Home", icon: "plant", photos: [],
+    desc: "For keys, hats, and bags." },
+  { name: "Something else", cat: "Custom", icon: "tag", photos: [],
+    desc: "Want something that's not here? Tell me what it is and I'll see if I can print it." },
 ];
 
 // SIZES — the size choices on the quote form.
@@ -102,6 +123,54 @@ function orderQty() {
 document.querySelectorAll("[data-shop-name]").forEach((n) => (n.textContent = SHOP.name));
 document.title = `${SHOP.name} — Custom 3D Prints`;
 
+// ----- Photo gallery -----
+let galleryProduct = null;
+let galleryIndex = 0;
+
+function showPhoto(index) {
+  const photos = galleryProduct.photos;
+  galleryIndex = (index + photos.length) % photos.length;
+  $("gallery-img").src = photos[galleryIndex];
+  $("gallery-img").alt = `${galleryProduct.name}, photo ${galleryIndex + 1} of ${photos.length}`;
+  $("gallery-title").textContent = galleryProduct.name;
+  $("gallery-count").textContent = `${galleryIndex + 1} / ${photos.length}`;
+  const many = photos.length > 1;
+  $("gallery-prev").hidden = !many;
+  $("gallery-next").hidden = !many;
+}
+
+function openGallery(product) {
+  galleryProduct = product;
+  showPhoto(0);
+  $("gallery").showModal();
+}
+
+$("gallery-prev").addEventListener("click", () => showPhoto(galleryIndex - 1));
+$("gallery-next").addEventListener("click", () => showPhoto(galleryIndex + 1));
+$("gallery-close").addEventListener("click", () => $("gallery").close());
+$("gallery").addEventListener("click", (e) => {
+  if (e.target === $("gallery")) $("gallery").close(); // clicked the dark area outside the photo
+});
+$("gallery").addEventListener("keydown", (e) => {
+  if (e.key === "ArrowLeft") showPhoto(galleryIndex - 1);
+  if (e.key === "ArrowRight") showPhoto(galleryIndex + 1);
+});
+
+// The top of a product card: its first photo (tap to open the gallery), or an icon if it has no photos yet.
+function cardTop(p) {
+  const photos = p.photos || [];
+  if (photos.length === 0) {
+    return el("div", { class: "card-icon", html: `<svg viewBox="0 0 24 24" aria-hidden="true">${ICONS[p.icon] || ICONS.gem}</svg>` });
+  }
+  const hint = photos.length === 1 ? "Tap to see photo" : `Tap to see ${photos.length} photos`;
+  const button = el("button", { class: "card-photo", type: "button", "aria-label": `${p.name}: ${hint.toLowerCase()}` }, [
+    el("img", { src: photos[0], alt: "", loading: "lazy" }),
+    el("span", { class: "card-photo-hint", text: hint }),
+  ]);
+  button.addEventListener("click", () => openGallery(p));
+  return button;
+}
+
 // ----- Products + filters -----
 let activeCat = "All";
 
@@ -132,7 +201,7 @@ function renderProducts() {
         $("f-name").focus({ preventScroll: true });
       });
       return el("article", { class: "card", style: `--tint:${tint}` }, [
-        el("div", { class: "card-icon", html: `<svg viewBox="0 0 24 24" aria-hidden="true">${ICONS[p.icon] || ICONS.gem}</svg>` }),
+        cardTop(p),
         el("span", { class: "card-cat", text: p.cat }),
         el("h3", { text: p.name }),
         el("p", { text: p.desc }),
