@@ -4,6 +4,7 @@
 
 const SHOP = {
   name: "Layer Lab",   // business name
+  timelapsePrice: "15¢",   // what the time-lapse video add-on costs (shown on the quote form)
   email: "rishik.sundar03@gmail.com",   // quote requests get emailed here
 };
 
@@ -306,6 +307,7 @@ $("order-form").addEventListener("submit", async (e) => {
     `Item: ${form.item.value}`,
     `Color: ${form.color.value}`,
     choiceLine(),
+    `Time-lapse video: ${form.timelapse.checked ? `yes (+${SHOP.timelapsePrice})` : "no"}`,
     `How many: ${orderQty()}`,
     `Details: ${form.notes.value.trim() || "none"}`,
   ].filter(Boolean).join("\n");
@@ -328,6 +330,7 @@ $("order-form").addEventListener("submit", async (e) => {
           item: form.item.value,
           color: form.color.value,
           option: choiceLine() || "none",
+          timelapse_video: form.timelapse.checked ? `yes (+${SHOP.timelapsePrice})` : "no",
           quantity: orderQty(),
           details: form.notes.value.trim() || "none",
         }),
@@ -362,3 +365,4 @@ renderFilters();
 renderProducts();
 pickColor(COLORS[0].name);
 updateChoice();
+$("timelapse-price").textContent = `+${SHOP.timelapsePrice}`;
