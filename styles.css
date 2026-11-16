@@ -351,6 +351,7 @@ a { color: inherit; text-decoration: none; }
 form { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
 .field { display: grid; gap: 6px; }
 .field-wide { grid-column: 1 / -1; }
+.field[hidden] { display: none; }
 label { font-size: 0.92rem; }
 .optional { color: var(--ink-soft); }
 

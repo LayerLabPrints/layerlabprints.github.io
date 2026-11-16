@@ -49,8 +49,20 @@ const PRODUCTS = [
     desc: "Want something that's not here? Tell me what it is and I'll see if I can print it." },
 ];
 
-// SIZES — the size choices on the quote form.
-const SIZES = ["Small", "Medium", "Large"];
+// CHOICES — the extra question the quote form asks for each product.
+// "label" is the question and "options" are the answers to pick from.
+// A product that isn't listed here doesn't get an extra question.
+const SML = ["Small", "Medium", "Large"];
+const CHOICES = {
+  "Clicker":             { label: "How many keys?",  options: ["1 key", "2 keys", "3 keys", "4 keys", "5 keys"] },
+  "Articulated dragon":  { label: "Size",            options: SML },
+  "Phone stand":         { label: "What's it for?",  options: ["Phone", "Tablet"] },
+  "Controller holder":   { label: "Holds",           options: ["1 controller", "2 controllers"] },
+  "Pen holder":          { label: "Size",            options: SML },
+  "Cable clips":         { label: "Pack size",       options: ["Pack of 2", "Pack of 4", "Pack of 6"] },
+  "Medal hanger":        { label: "Size",            options: ["Small", "Large"] },
+  "Small planter":       { label: "Size",            options: SML },
+};
 
 const FILAMENTS = [
   {
@@ -197,6 +209,7 @@ function renderProducts() {
       const orderBtn = el("button", { class: "card-btn", type: "button", text: "Get a quote" });
       orderBtn.addEventListener("click", () => {
         $("f-item").value = p.name;
+        updateChoice();
         $("order").scrollIntoView();
         $("f-name").focus({ preventScroll: true });
       });
@@ -255,7 +268,21 @@ $("f-color").replaceChildren(
   )
 );
 $("f-color").addEventListener("change", (e) => pickColor(e.target.value));
-$("f-size").replaceChildren(...SIZES.map((s) => el("option", { value: s, text: s })));
+function updateChoice() {
+  const choice = CHOICES[$("f-item").value];
+  $("f-size-field").hidden = !choice;
+  if (!choice) return;
+  $("f-size-label").textContent = choice.label;
+  $("f-size").replaceChildren(...choice.options.map((o) => el("option", { value: o, text: o })));
+}
+
+// The extra answer as one line of text, like "How many keys?: 3 keys". Empty if the product has none.
+function choiceLine() {
+  const choice = CHOICES[$("f-item").value];
+  return choice ? `${choice.label.replace(/\?$/, "")}: ${$("f-size").value}` : "";
+}
+
+$("f-item").addEventListener("change", updateChoice);
 
 $("order-form").addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -278,10 +305,10 @@ $("order-form").addEventListener("submit", async (e) => {
     `Email: ${form.contact.value.trim()}`,
     `Item: ${form.item.value}`,
     `Color: ${form.color.value}`,
-    `Size: ${form.size.value}`,
+    choiceLine(),
     `How many: ${orderQty()}`,
     `Details: ${form.notes.value.trim() || "none"}`,
-  ].join("\n");
+  ].filter(Boolean).join("\n");
 
   if (SHOP.email) {
     const subject = `Quote request: ${orderQty()} x ${form.item.value}`;
@@ -300,7 +327,7 @@ $("order-form").addEventListener("submit", async (e) => {
           email: form.contact.value.trim(),
           item: form.item.value,
           color: form.color.value,
-          size: form.size.value,
+          option: choiceLine() || "none",
           quantity: orderQty(),
           details: form.notes.value.trim() || "none",
         }),
@@ -334,3 +361,4 @@ $("order-form").addEventListener("submit", async (e) => {
 renderFilters();
 renderProducts();
 pickColor(COLORS[0].name);
+updateChoice();
