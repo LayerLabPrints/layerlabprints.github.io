@@ -16,6 +16,10 @@ const SHOP = {
 const PRODUCTS = [
   { name: "Clicker", cat: "Fidgets", icon: "fidget", photos: [],
     desc: "Has a real switch inside so it actually clicks. Kind of addicting." },
+  { name: "Hex pull fidget", cat: "Fidgets", icon: "gem", photos: [],
+    desc: "A hexagon you pull apart and push back together. Hard to put down." },
+  { name: "Egg fidget", cat: "Fidgets", icon: "fidget", photos: [],
+    desc: "An egg-shaped fidget that fits in your hand." },
   { name: "Articulated dragon", cat: "Fidgets", icon: "gem", photos: [],
     desc: "Prints in one piece and wiggles when you pick it up. Looks really good in the silk colours." },
   { name: "Slider fidget", cat: "Fidgets", icon: "fidget", photos: [],
