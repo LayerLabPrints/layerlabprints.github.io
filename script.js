@@ -5,7 +5,7 @@
 const SHOP = {
   name: "Layer Lab",   // business name
   timelapsePrice: "15¢",   // what the time-lapse video add-on costs (shown on the quote form)
-  email: "rishik.sundar03@gmail.com",   // quote requests get emailed here
+  formKey: "d37e5324-c441-47d2-82d9-bcd8b11b4980",   // Web3Forms key: quote requests get emailed to the shop inbox
 };
 
 // icon options: fidget, desk, tech, key, plant, ball, tag, gem
@@ -312,19 +312,20 @@ $("order-form").addEventListener("submit", async (e) => {
     `Details: ${form.notes.value.trim() || "none"}`,
   ].filter(Boolean).join("\n");
 
-  if (SHOP.email) {
+  if (SHOP.formKey) {
     const subject = `Quote request: ${orderQty()} x ${form.item.value}`;
     msg.textContent = "Sending...";
 
-    // Send it straight to the shop inbox with FormSubmit (formsubmit.co).
+    // Send it straight to the shop inbox with Web3Forms (web3forms.com).
     let sent = false;
     try {
-      const res = await fetch(`https://formsubmit.co/ajax/${SHOP.email}`, {
+      const res = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "application/json" },
         body: JSON.stringify({
-          _subject: subject,
-          _template: "table",
+          access_key: SHOP.formKey,
+          subject: subject,
+          from_name: `${SHOP.name} website`,
           name: form.name.value.trim(),
           email: form.contact.value.trim(),
           item: form.item.value,
@@ -345,9 +346,7 @@ $("order-form").addEventListener("submit", async (e) => {
       msg.textContent = "Sent! You'll get an email back with your quote.";
       form.notes.value = "";
     } else {
-      // Backup plan: open the customer's own email app with the request filled in.
-      window.location.href = `mailto:${SHOP.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(request)}`;
-      msg.textContent = "Couldn't send it automatically, so your email app is opening with the request filled in. Just hit send.";
+      msg.textContent = "Sorry, that didn't send. Check your internet and try again in a minute.";
     }
     return;
   }
