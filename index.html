@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Layer Lab — Custom 3D Prints</title>
+  <meta name="description" content="Custom 3D printed fidgets, desk gear, keychains and more. Pick a design, pick a color, and we print it.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <header class="nav">
+    <a class="logo" href="#top">
+      <span class="logo-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span data-shop-name>Layer Lab</span>
+    </a>
+    <nav class="nav-links" aria-label="Main">
+      <a href="#shop">Shop</a>
+      <a href="#materials">Materials</a>
+      <a href="#how">How it works</a>
+      <a class="btn btn-small" href="#order">Get a quote</a>
+    </nav>
+  </header>
+
+  <main id="top">
+
+    <section class="hero">
+      <div class="hero-text">
+        <p class="eyebrow">Custom 3D printing</p>
+        <h1>Printed layer by layer, made just for you.</h1>
+        <p class="lead">Fidgets, desk gear, keychains and custom ideas. Pick a design, pick a color, and it gets printed to order.</p>
+        <div class="hero-actions">
+          <a class="btn" href="#shop">See what I make</a>
+          <a class="btn btn-ghost" href="#order">Get a quote</a>
+        </div>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <div class="printer">
+          <div class="nozzle"></div>
+          <div class="layers">
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+          </div>
+          <div class="bed"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="shop" class="section">
+      <div class="section-head">
+        <p class="eyebrow">Shop</p>
+        <h2>Things I make</h2>
+        <p class="sub">Tap a category to filter. Every item can be printed in any color below.</p>
+      </div>
+      <div class="chips" id="filters" role="group" aria-label="Filter by category"></div>
+      <div class="grid" id="products"></div>
+    </section>
+
+    <section id="materials" class="section">
+      <div class="section-head">
+        <p class="eyebrow">Materials</p>
+        <h2>Filament and colors</h2>
+        <p class="sub">Filament is the plastic the printer melts and stacks into your print. Here's what I print with.</p>
+      </div>
+      <div class="filaments" id="filaments"></div>
+      <h3 class="colors-title">Colors <span id="color-name" class="color-name"></span></h3>
+      <div class="swatches" id="swatches" role="group" aria-label="Pick a color"></div>
+    </section>
+
+    <section id="how" class="section">
+      <div class="section-head">
+        <p class="eyebrow">How it works</p>
+        <h2>Three easy steps</h2>
+      </div>
+      <ol class="steps">
+        <li>
+          <span class="step-num">1</span>
+          <h3>Pick it</h3>
+          <p>Choose something from the shop, or describe your own idea.</p>
+        </li>
+        <li>
+          <span class="step-num">2</span>
+          <h3>Color it</h3>
+          <p>Pick the filament color you want. Add a name or number if you like.</p>
+        </li>
+        <li>
+          <span class="step-num">3</span>
+          <h3>Print it</h3>
+          <p>It gets printed, cleaned up, checked, and handed over.</p>
+        </li>
+      </ol>
+    </section>
+
+    <section id="order" class="section">
+      <div class="order-card">
+        <div class="section-head">
+          <p class="eyebrow">Quote</p>
+          <h2>Get a quote</h2>
+          <p class="sub">Tell me what you want and you'll get a reply with the price and how long it will take. The price depends on the filament, how big it is, and how many you want.</p>
+        </div>
+        <form id="order-form" novalidate>
+          <div class="field">
+            <label for="f-name">Your name</label>
+            <input id="f-name" name="name" type="text" autocomplete="name" required>
+          </div>
+          <div class="field">
+            <label for="f-contact">Email</label>
+            <input id="f-contact" name="contact" type="email" autocomplete="email" required>
+          </div>
+          <div class="field">
+            <label for="f-item">What do you want?</label>
+            <select id="f-item" name="item"></select>
+          </div>
+          <div class="field">
+            <label for="f-color">Color</label>
+            <select id="f-color" name="color"></select>
+          </div>
+          <div class="field">
+            <label for="f-size">Size</label>
+            <select id="f-size" name="size"></select>
+          </div>
+          <div class="field">
+            <label for="f-qty">How many?</label>
+            <input id="f-qty" name="qty" type="number" min="1" max="99" value="1" inputmode="numeric">
+          </div>
+          <div class="field field-wide">
+            <label for="f-notes">Details <span class="optional">(optional)</span></label>
+            <textarea id="f-notes" name="notes" rows="4" placeholder="Size, a name to add, how many, anything else"></textarea>
+          </div>
+          <div class="field-wide form-actions">
+            <button class="btn" type="submit">Get my quote</button>
+            <p id="form-msg" class="form-msg" role="status"></p>
+          </div>
+        </form>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <span data-shop-name>Layer Lab</span>
+    <span>Printed to order</span>
+    <a href="#top">Back to top</a>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
